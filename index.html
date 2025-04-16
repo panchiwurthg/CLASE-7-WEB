@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Séptima clase</title>
+        <style>
+            [data-theme="light"] { --color-bg: #eceff1; --color-fg: #263238; }
+
+            [data-theme="dark"] { --color-bg: #263238; --color-fg: #eceff1; }
+
+            * { margin: 0; padding: 0; }
+
+            body { font-family: monospace; color: var(--color-fg); background: var(--color-bg); }
+
+            article { padding: 1rem; width: min(90%, 500px); margin: 2rem auto; text-align: center; }
+
+            article:nth-child(3) { width: min(90%, 1000px); margin-bottom: 5rem; }
+
+            h2 { font-size: 1.5rem; margin: 1.5rem auto; line-height: 1; }
+
+            p { margin: 0.75rem auto; line-height: 1.5; }
+
+            input[type="radio"] { accent-color: #232323; }
+
+            @keyframes pedrope {
+                0% { transform: rotate(0); }
+                100% { transform: rotate(360deg); }
+            }
+
+            figure { width: 50%; margin: 2rem auto; background: #fff; }
+
+            img { width: 100%; }
+
+            img.animate { animation: pedrope 2s linear infinite; }
+
+            div.portrait > svg { font-size: 7.5%; stroke-width: 0; fill: white; alignment-baseline: middle; text-anchor: start; display: block; margin:3rem; }
+
+            div.landscape { display: inline-block; }
+
+            div.landscape > svg { width: 10%; font-size: 25%; stroke-width: 0; fill: black; alignment-baseline: middle; text-anchor: middle; }
+
+            div.landscape > svg:nth-child(5) { margin-left:3%; margin-right:4%; }
+
+            div.landscape > svg:nth-child(7) { margin-left:2%; }
+
+            @media (orientation: portrait) {
+                div.landscape { display: none; }
+            }
+
+            @media (orientation: landscape) {
+                div.portrait { display: none; }
+            }
+        </style>
+    </head>
+    <body>
+        <article>
+            <h2>Del innerHTML al setAttribute</h2>
+            <!--usando input type="radio"-->
+            <p>
+                <input type="radio" name="stroke" value="0.25" onchange="primera(this.value)" /> LIGHT <input type="radio" name="stroke" value="1" checked onchange="primera(this.value)" /> NORMAL
+                <input type="radio" name="stroke" value="1.75" onchange="primera(this.value)" /> BOLD
+            </p>
+            <!--un svg que tomo de https://feathericons.com/-->
+            <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <!--usando input type="range"-->
+            <p><input type="range" min="0" max="359" step="1" value="0" onchange="segunda(this.value)" /></p>
+            <p>Stroke: HSL(<span>0</span>,100%,50%)</p>
+            <!--usando input type="color"-->
+            <p>Fill: <input type="color" value="#FFFFFF" onchange="tercera(this.value)" /></p>
+        </article>
+        <article>
+            <h2>Del setAttribute al AddClass</h2>
+            <!--usando input type="checkbox"-->
+            <input type="checkbox" name="animado" onchange="cuarta()" /> <label>ANÍMATE, PEDRO</label>
+            <figure>
+                <img src="https://raw.githubusercontent.com/profesorfaco/opr/refs/heads/main/clase-07/img/mapache.png" />
+            </figure>
+        </article>
+        <article>
+            <h2>Y cerremos con "un SVG responsive"</h2>
+            <div class="portrait"></div>
+            <div class="landscape"></div>
+        </article>
+        <script>
+            // Hay muchos tipos de inputs: https://www.w3schools.com/html/html_form_input_types.asp
+            // Acá usaremos cuatro: radio, range, color y checkbox
+
+            function primera(valor) {
+                document.querySelectorAll("svg")[0].setAttribute("stroke-width", valor);
+            }
+            primera(1);
+
+            function segunda(valor) {
+                document.querySelectorAll("svg")[0].setAttribute("stroke", "hsl(" + valor + ",100%,50%)");
+                document.querySelector("span").innerHTML = valor;
+            }
+            segunda(0);
+
+            function tercera(valor) {
+                document.querySelector("rect").setAttribute("fill", valor);
+            }
+
+            function cuarta() {
+                if (document.querySelector("input[type=checkbox]").checked == true) {
+                    document.querySelector("img").classList.add("animate");
+                } else {
+                    document.querySelector("img").removeAttribute("class");
+                    // también podría borrar la clase, dejando un class vacío
+                    // document.querySelector("img").classList.remove("animate");
+                }
+            }
+
+            async function quinta() {
+                const consulta = await fetch("https://raw.githubusercontent.com/panchiwurthg/CLASE-7-WEB/refs/heads/main/csvjson%20(1).json");
+                const data = await consulta.json();
+                console.log(data);
+                const svgMobile = document.querySelectorAll("div.portrait")[0];
+                const svgOther = document.querySelectorAll("div.landscape")[0];
+                data.forEach((v, i) => {
+                    let fontSize = v.Ballena.length > 12 ? 10 : 15;
+
+                    svgMobile.innerHTML += `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-10.0 -10.0 100.0 135.0" ${v.Comparado*2}"><text x="50%" y="80%" text-anchor="middle" font-size="6">${v.Ballena}</text></svg>`;
+                    svgOther.innerHTML += `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-10.0 -10.0 100.0 135.0"><text x="50%" y="80%" text-anchor="middle" font-size="6" font-weight"bold">${v.Ballena}</text>
+
+
+
+
+            <g transform="scale(${v.Comparado/2})">
+            <path d="m99.156 33.406c-0.23047-0.45703-1.0547 0.64062-2.3828 0.27344-1.3281-0.36719-2.3398 0.36719-4.4492-0.89844s-9.7344-4.3867-11.301-4.6289c-1.5625-0.24219-1.2539-1.1367-2.168-1.3438-0.91016-0.20703-1.7344 1.4609-1.875 2.0625-0.13672 0.60156-0.85938 1.8047-0.85938 1.8047 0.92969-0.32812 4.4609-0.82812 4.4609-0.82812s-6.2383 1.1211-11.191 4.4141-16.695 4.918-19.492 4.4141c-2.7969-0.50391-4.082-1.2031-6.0781-0.92969-1.9961 0.27344-7.0156-0.61719-11.316-1.375-4.3008-0.75781-4.2656-1.0312-6.9141-2.3398-2.6484-1.3086-5.9844-0.89453-8.9062-2.5117-2.9258-1.6172-7.1562-1.3398-9.4258-1.6172-2.2695-0.27344-4.9531 0.75781-4.9531 0.75781 3.5664-0.28516 6.9062 0.76953 9.1406 1.207 8.8516 1.7422 7.7109 1.9102 10.43 4.4727 0.96875 0.91406 3.7539 1.4922 4.293 3.6406 1.4844 5.918 3.1328 7.3203 3.3477 7.4805-2.0039-1.2578-3.0977-5.6641-3.5078-7.2734-0.41406-1.6172-2.9922-2.8906-3.9922-3.3711-0.99609-0.48047-0.6875-0.72266-2.4062-2.2031s-8.1562-2.4688-8.7734-2.6133c-1.4258-0.34375-4-1.1484-7.875-1.2383-3.875-0.09375-1.375 2.8906-0.82813 3.2344 0.55078 0.34375 6.1914 5.2969 8.875 10.527 2.6836 5.2266 15.547 12.496 15.547 12.496s1.4219 1.2383 1.2383 6.6055c-0.18359 5.3672 5.9141 6.1914 6.1445 5.457 0.22656-0.73438-1.2852-1.1016-1.1914-2.6602s0.41406-4.3125 0.09375-4.9531c-0.32031-0.64062-0.46094-2.7969-0.46094-2.7969l2.3398 0.27344s0.046875-0.50391-0.18359-1.2383c-0.23047-0.73438-1.0547-3.5312-0.78125-4.2656 0.27344-0.73438-1.1016-3.4844-1.1016-4.8164s1.7891-0.73438 1.7891-0.73438c-1.8828-0.55078-1.0078 1.6055-0.87109 2.3828 0.13672 0.78125 0.96484 2.25 0.64063 3.3008-0.32031 1.0547-0.039063 2.2773 0.37109 3 0.41406 0.72266 1.1172 4.25 1.1172 4.25 2.5469 11.969 14.012 12.887 14.516 12.199s-1.8828-1.5117-3.0273-3.0273-3.3945-1.3281-2.5234-4.1719c0.87109-2.8438-1.6055-6.2383-1.6055-6.2383 19.398-1.1016 28.391-17.887 32.746-21.234 4.3555-3.3477 1.7422-5.5039 11.191-3.2578 9.457 2.2578 12.391-1.2266 12.16-1.6875zm-74.758 10.734c1.1953 4.2656 5.4141 7.5234 7.6133 8.4844 0 0-5.0391-1.3047-8.3906-8.6211-2.9688-6.4766-3.7148-7.375-3.7148-7.375s3.2969 3.2461 4.4922 7.5117zm8.1406 11.914s-14.961-4.6562-15.715-21.031c0.070312 0.92969 1.3359 14.453 15.715 21.031zm-16.578-17.441c0.37891 3.9375 1.5625 4.1289 2.4062 6.0156 0 0-2.4414-1.6953-3.0625-6.082-0.22656-1.6211-1.5-4.0234-1.5-4.0234 0-0.003907 1.9336 1.7812 2.1562 4.0898zm-9.6328-2.6836c-0.32031-1.8828-2.8203-3.4609-2.8203-3.4609s2.3633 0.96484 3.1406 3.4844c0.78125 2.5234 2.3633 4.8398 2.3633 4.8398s-2.3633-2.9805-2.6836-4.8633zm8.7148 11.238c-1.3789-1.2383-5.5508-6.7422-5.918-8.8516s-2.7969-5.5039-2.7969-5.5039c0.87109 0.82422 2.8398 4.3945 3.2109 5.457 1.1328 3.2461 4.8164 7.3398 5.7812 8.3945 0.96094 1.0547 5.9609 6.6484 5.9609 6.6484-0.82812-0.59766-4.8633-4.9062-6.2383-6.1445zm19.125 10.684s-15.344-2.5234-21.121-19.172l-2.5-5s1.7422 1.6055 2.9375 4.5391c1.1875 2.9414 6.4648 15.184 20.684 19.633zm-1.3555-3.2109s-10.41-5.2969-11.535-11.969c0.003906 0 3.4023 7.3281 11.535 11.969zm-1.082-9.2188s-0.72266 0.58594-1.4453-0.12109-0.27344-1.0312-0.27344-1.0312-0.96484-0.44531-1.0508-1.0664c0 0 0.53125 0.87891 1.6016 0.79297 1.0664-0.085938 1.3711 0.73828 1.4531 1.1328 0.078125 0.39453 1.5781 1.1523 1.6641 1.1523-0.007813 0.003906-1.7578-0.32422-1.9492-0.85938z"/>
+            </g>
+            <text x="0.0" y="117.5" font-size="15" font-weight="bold" font-family="Arbeit Regular, Helvetica, Arial-Unicode, Arial, Sans-serif" fill="blue"></text><text x="0.0" y="122.5" font-size="5.0" font-weight="bold" font-family="Arbeit Regular, Helvetica, Arial-Unicode, Arial, Sans-serif" fill="blue"></text></svg>`;
+                });
+            }
+
+            quinta().catch((error) => console.error(error));
+
+            function sexta() {
+                var ancho = window.innerWidth;
+                var alto = window.innerHeight;
+                if (ancho < alto) {
+                    document.querySelector("html").setAttribute("data-theme", "dark");
+                } else {
+                    document.querySelector("html").setAttribute("data-theme", "light");
+                }
+            }
+            sexta();
+            window.addEventListener("resize", sexta);
+        </script>
+    </body>
+</html>
