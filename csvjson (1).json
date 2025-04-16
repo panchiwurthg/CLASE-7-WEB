@@ -1,0 +1,42 @@
+[
+  {
+    "Ballena": "Beluga",
+    "Largo": "4m",
+    "Comparado": 0.3
+  },
+  {
+    "Ballena": "Orca",
+    "Largo": "7 m",
+    "Comparado": 0.53
+  },
+  {
+    "Ballena": "Ballena Gris",
+    "Largo": "12 m",
+    "Comparado": 0.92
+  },
+  {
+    "Ballena": "Ballena Jorobada",
+    "Largo": "13 m",
+    "Comparado": 1
+  },
+  {
+    "Ballena": "Ballena de Groenlandia",
+    "Largo": "14 m",
+    "Comparado": 1.07
+  },
+  {
+    "Ballena": "Cachalote",
+    "Largo": "15 m",
+    "Comparado": 1.15
+  },
+  {
+    "Ballena": "Rorcual Común",
+    "Largo": "18 m",
+    "Comparado": 1.38
+  },
+  {
+    "Ballena": "ballena Azul",
+    "Largo": "25 m",
+    "Comparado": 1.92
+  }
+]
